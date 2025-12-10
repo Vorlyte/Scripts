@@ -19,7 +19,7 @@ local settings = {
     Gravity = workspace.Gravity,
     FlySpeed = 50,
     Noclip = false,
-    Fly = false,
+    Fly = true,
 }
 
 -- FUNÇÃO PARA ATUALIZAR STATS
