@@ -1,5 +1,3 @@
--- HUB PRO MURILEX EDITION 🔥 (Corrigido para mostrar botões)
-
 local Players = game:GetService("Players")
 local UIS = game:GetService("UserInputService")
 local RunService = game:GetService("RunService")
@@ -9,7 +7,6 @@ local mouse = LocalPlayer:GetMouse()
 local ScreenGui = Instance.new("ScreenGui", LocalPlayer:WaitForChild("PlayerGui"))
 ScreenGui.ResetOnSpawn = false
 
--- FRAME PRINCIPAL
 local Frame = Instance.new("Frame", ScreenGui)
 Frame.Size = UDim2.new(0, 250, 0, 400)
 Frame.Position = UDim2.new(0, 20, 0.5, -200)
@@ -17,7 +14,6 @@ Frame.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
 Frame.BorderSizePixel = 0
 Frame.Visible = true
 
--- BOTÃO FECHAR
 local CloseBtn = Instance.new("TextButton", Frame)
 CloseBtn.Size = UDim2.new(0, 30, 0, 30)
 CloseBtn.Position = UDim2.new(1, -35, 0, 5)
@@ -27,9 +23,8 @@ CloseBtn.Text = "X"
 CloseBtn.TextScaled = true
 CloseBtn.BorderSizePixel = 0
 
--- CONTAINER PARA BOTÕES
 local ButtonContainer = Instance.new("Frame", Frame)
-ButtonContainer.Size = UDim2.new(1, 0, 1, -40) -- sobra espaço para o botão X
+ButtonContainer.Size = UDim2.new(1, 0, 1, -40)
 ButtonContainer.Position = UDim2.new(0,0,0,35)
 ButtonContainer.BackgroundTransparency = 1
 
@@ -37,7 +32,6 @@ local UIListLayout = Instance.new("UIListLayout", ButtonContainer)
 UIListLayout.Padding = UDim.new(0,5)
 UIListLayout.SortOrder = Enum.SortOrder.LayoutOrder
 
--- BOTÃO FLUTUANTE
 local FloatBtn = Instance.new("TextButton", ScreenGui)
 FloatBtn.Size = UDim2.new(0, 50, 0, 50)
 FloatBtn.Position = UDim2.new(0, 20, 0.5, -25)
@@ -48,7 +42,6 @@ FloatBtn.Text = "HUB"
 FloatBtn.Visible = false
 FloatBtn.AutoButtonColor = true
 
--- FUNÇÃO ARRASTAR BOTÃO
 local dragging, dragInput, dragStart, startPos
 local function update(input)
     local delta = input.Position - dragStart
@@ -81,7 +74,6 @@ RunService.RenderStepped:Connect(function()
     end
 end)
 
--- FECHAR E ABRIR HUB
 CloseBtn.MouseButton1Click:Connect(function()
     Frame.Visible = false
     FloatBtn.Visible = true
@@ -91,7 +83,6 @@ FloatBtn.MouseButton1Click:Connect(function()
     FloatBtn.Visible = false
 end)
 
--- FUNÇÃO PARA CRIAR BOTÕES
 local function CreateButton(txt)
     local b = Instance.new("TextButton", ButtonContainer)
     b.Size = UDim2.new(1, -10, 0, 35)
@@ -103,8 +94,6 @@ local function CreateButton(txt)
     return b
 end
 
---== FUNÇÕES DO HUB ==--
--- TP TOOL
 local function CreateTpTool()
     local tool = Instance.new("Tool")
     tool.Name = "TP Tool"
@@ -117,7 +106,6 @@ local function CreateTpTool()
     end)
 end
 
--- ESP
 local espEnabled = false
 local function ToggleESP()
     espEnabled = not espEnabled
@@ -140,7 +128,6 @@ local function ToggleESP()
     end
 end
 
--- Fly
 local flying = false
 local function Fly()
     flying = not flying
@@ -172,7 +159,6 @@ local function Speed()
     h.WalkSpeed = 50
 end
 
--- Noclip
 local noclip = false
 local function ToggleNoclip()
     noclip = not noclip
@@ -185,12 +171,10 @@ local function ToggleNoclip()
     end)
 end
 
--- Reset
 local function Reset()
     LocalPlayer.Character:BreakJoints()
 end
 
---== BOTÕES DO HUB ==--
 local b1 = CreateButton("Criar TP Tool")
 b1.MouseButton1Click:Connect(CreateTpTool)
 
@@ -208,3 +192,21 @@ b5.MouseButton1Click:Connect(ToggleNoclip)
 
 local b6 = CreateButton("Reset")
 b6.MouseButton1Click:Connect(Reset)
+
+local function Fling()
+    for _,plr in pairs(Players:GetPlayers()) do
+        if plr ~= LocalPlayer and plr.Character and plr.Character:FindFirstChild("HumanoidRootPart") then
+            local hrp = plr.Character.HumanoidRootPart
+            local bv = Instance.new("BodyVelocity")
+            bv.Velocity = Vector3.new(math.random(-100,100),50,math.random(-100,100))
+            bv.MaxForce = Vector3.new(9e9,9e9,9e9)
+            bv.P = 1250
+            bv.Parent = hrp
+            game.Debris:AddItem(bv,0.3) -- remove depois de 0.3s
+        end
+    end
+end
+
+-- Cria botão Fling
+local b7 = CreateButton("Fling")
+b7.MouseButton1Click:Connect(Fling)
