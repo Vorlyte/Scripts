@@ -1,4 +1,4 @@
--- HUB PRO MURILEX EDITION 🔥 (Atualizado e completo)
+-- HUB PRO MURILEX EDITION 🔥 (Corrigido para mostrar botões)
 
 local Players = game:GetService("Players")
 local UIS = game:GetService("UserInputService")
@@ -6,45 +6,49 @@ local RunService = game:GetService("RunService")
 local LocalPlayer = Players.LocalPlayer
 local mouse = LocalPlayer:GetMouse()
 
--- CRIA SCREENGUI
 local ScreenGui = Instance.new("ScreenGui", LocalPlayer:WaitForChild("PlayerGui"))
 ScreenGui.ResetOnSpawn = false
 
--- FRAME PRINCIPAL DO HUB
+-- FRAME PRINCIPAL
 local Frame = Instance.new("Frame", ScreenGui)
-Frame.Size = UDim2.new(0, 250, 0, 380)
-Frame.Position = UDim2.new(0, 20, 0.5, -190)
+Frame.Size = UDim2.new(0, 250, 0, 400)
+Frame.Position = UDim2.new(0, 20, 0.5, -200)
 Frame.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
 Frame.BorderSizePixel = 0
 Frame.Visible = true
 
--- LAYOUT DOS BOTÕES
-local UIListLayout = Instance.new("UIListLayout", Frame)
-UIListLayout.Padding = UDim.new(0, 6)
-UIListLayout.SortOrder = Enum.SortOrder.LayoutOrder
-
--- BOTÃO DE FECHAR
+-- BOTÃO FECHAR
 local CloseBtn = Instance.new("TextButton", Frame)
 CloseBtn.Size = UDim2.new(0, 30, 0, 30)
 CloseBtn.Position = UDim2.new(1, -35, 0, 5)
-CloseBtn.BackgroundColor3 = Color3.fromRGB(255, 0, 0)
-CloseBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
+CloseBtn.BackgroundColor3 = Color3.fromRGB(255,0,0)
+CloseBtn.TextColor3 = Color3.fromRGB(255,255,255)
 CloseBtn.Text = "X"
 CloseBtn.TextScaled = true
 CloseBtn.BorderSizePixel = 0
+
+-- CONTAINER PARA BOTÕES
+local ButtonContainer = Instance.new("Frame", Frame)
+ButtonContainer.Size = UDim2.new(1, 0, 1, -40) -- sobra espaço para o botão X
+ButtonContainer.Position = UDim2.new(0,0,0,35)
+ButtonContainer.BackgroundTransparency = 1
+
+local UIListLayout = Instance.new("UIListLayout", ButtonContainer)
+UIListLayout.Padding = UDim.new(0,5)
+UIListLayout.SortOrder = Enum.SortOrder.LayoutOrder
 
 -- BOTÃO FLUTUANTE
 local FloatBtn = Instance.new("TextButton", ScreenGui)
 FloatBtn.Size = UDim2.new(0, 50, 0, 50)
 FloatBtn.Position = UDim2.new(0, 20, 0.5, -25)
-FloatBtn.BackgroundColor3 = Color3.fromRGB(255, 0, 0)
-FloatBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
+FloatBtn.BackgroundColor3 = Color3.fromRGB(255,0,0)
+FloatBtn.TextColor3 = Color3.fromRGB(255,255,255)
 FloatBtn.TextScaled = true
 FloatBtn.Text = "HUB"
 FloatBtn.Visible = false
 FloatBtn.AutoButtonColor = true
 
--- FUNÇÃO DE ARRASTAR BOTÃO FLUTUANTE
+-- FUNÇÃO ARRASTAR BOTÃO
 local dragging, dragInput, dragStart, startPos
 local function update(input)
     local delta = input.Position - dragStart
@@ -77,12 +81,11 @@ RunService.RenderStepped:Connect(function()
     end
 end)
 
--- FUNÇÃO FECHAR/ABRIR HUB
+-- FECHAR E ABRIR HUB
 CloseBtn.MouseButton1Click:Connect(function()
     Frame.Visible = false
     FloatBtn.Visible = true
 end)
-
 FloatBtn.MouseButton1Click:Connect(function()
     Frame.Visible = true
     FloatBtn.Visible = false
@@ -90,10 +93,10 @@ end)
 
 -- FUNÇÃO PARA CRIAR BOTÕES
 local function CreateButton(txt)
-    local b = Instance.new("TextButton", Frame)
+    local b = Instance.new("TextButton", ButtonContainer)
     b.Size = UDim2.new(1, -10, 0, 35)
-    b.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
-    b.TextColor3 = Color3.fromRGB(255, 255, 255)
+    b.BackgroundColor3 = Color3.fromRGB(40,40,40)
+    b.TextColor3 = Color3.fromRGB(255,255,255)
     b.TextScaled = true
     b.BorderSizePixel = 0
     b.Text = txt
@@ -101,14 +104,12 @@ local function CreateButton(txt)
 end
 
 --== FUNÇÕES DO HUB ==--
-
 -- TP TOOL
 local function CreateTpTool()
     local tool = Instance.new("Tool")
     tool.Name = "TP Tool"
     tool.RequiresHandle = false
     tool.Parent = LocalPlayer.Backpack
-
     tool.Activated:Connect(function()
         if mouse and mouse.Hit then
             LocalPlayer.Character:MoveTo(mouse.Hit.p)
@@ -123,10 +124,10 @@ local function ToggleESP()
     if espEnabled then
         for _,plr in pairs(Players:GetPlayers()) do
             if plr ~= LocalPlayer and plr.Character then
-                local highlight = Instance.new("Highlight")
-                highlight.FillTransparency = 1
-                highlight.OutlineColor = Color3.new(1,0,0)
-                highlight.Parent = plr.Character
+                local h = Instance.new("Highlight")
+                h.FillTransparency = 1
+                h.OutlineColor = Color3.new(1,0,0)
+                h.Parent = plr.Character
             end
         end
     else
@@ -146,10 +147,9 @@ local function Fly()
     if flying then
         local body = Instance.new("BodyVelocity")
         body.Name = "FLY_FORCE"
-        body.Velocity = Vector3.new(0,0,0)
         body.MaxForce = Vector3.new(9e9,9e9,9e9)
+        body.Velocity = Vector3.new(0,0,0)
         body.Parent = LocalPlayer.Character:WaitForChild("HumanoidRootPart")
-
         RunService.RenderStepped:Connect(function()
             if flying then
                 local dir = Vector3.new()
