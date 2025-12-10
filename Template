@@ -1,0 +1,67 @@
+--[[ 
+  LocalScript Template - Player Controller
+  Colocar em: StarterPlayerScripts
+]]
+
+local Players = game:GetService("Players")
+local UserInputService = game:GetService("UserInputService")
+local RunService = game:GetService("RunService")
+local player = Players.LocalPlayer
+local character = player.Character or player.CharacterAdded:Wait()
+local humanoid = character:WaitForChild("Humanoid")
+local root = character:WaitForChild("HumanoidRootPart")
+
+-- CONFIGURAÇÕES INICIAIS
+local settings = {
+    WalkSpeed = 16,   -- Padrão Roblox
+    JumpPower = 50,   -- Padrão Roblox
+    HipHeight = humanoid.HipHeight,
+    Gravity = workspace.Gravity,
+    FlySpeed = 50,
+    Noclip = false,
+    Fly = false,
+}
+
+-- FUNÇÃO PARA ATUALIZAR STATS
+local function updateStats()
+    humanoid.WalkSpeed = settings.WalkSpeed
+    humanoid.JumpPower = settings.JumpPower
+    humanoid.HipHeight = settings.HipHeight
+    workspace.Gravity = settings.Gravity
+end
+
+-- CHAMAR AO INICIAR
+updateStats()
+
+-- FUNÇÃO NOCIP
+local function noclipLoop()
+    while settings.Noclip do
+        RunService.Stepped:Wait()
+        for _, part in pairs(character:GetDescendants()) do
+            if part:IsA("BasePart") then
+                part.CanCollide = false
+            end
+        end
+    end
+end
+
+-- FUNÇÃO FLY
+local function flyLoop()
+    local bodyVelocity
+    if settings.Fly then
+        bodyVelocity = Instance.new("BodyVelocity")
+        bodyVelocity.MaxForce = Vector3.new(1e5, 1e5, 1e5)
+        bodyVelocity.Velocity = Vector3.new(0,0,0)
+        bodyVelocity.Parent = root
+    end
+
+    while settings.Fly do
+        RunService.RenderStepped:Wait()
+        local moveDir = Vector3.new()
+        if UserInputService:IsKeyDown(Enum.KeyCode.W) then moveDir = moveDir + workspace.CurrentCamera.CFrame.LookVector end
+        if UserInputService:IsKeyDown(Enum.KeyCode.S) then moveDir = moveDir - workspace.CurrentCamera.CFrame.LookVector end
+        if UserInputService:IsKeyDown(Enum.KeyCode.A) then moveDir = moveDir - workspace.CurrentCamera.CFrame.RightVector end
+        if UserInputService:IsKeyDown(Enum.KeyCode.D) then moveDir = moveDir + workspace.CurrentCamera.CFrame.RightVector end
+        if UserInputService:IsKeyDown(Enum.KeyCode.Space) then moveDir = moveDir + Vector3.new(0,1,0) end
+        if UserInputService:IsKeyDown(Enum.KeyCode.LeftShift) then moveDir = moveDir - Vector3.new(0,1,0) end
+        bodyVelocity.V
