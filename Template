@@ -13,8 +13,8 @@ local root = character:WaitForChild("HumanoidRootPart")
 
 -- CONFIGURAÇÕES INICIAIS
 local settings = {
-    WalkSpeed = 999999999999999999999999,   -- Padrão Roblox
-    JumpPower = 999999999999999999999999,   -- Padrão Roblox
+    WalkSpeed = 9999,   -- Padrão Roblox
+    JumpPower = 9999,   -- Padrão Roblox
     HipHeight = humanoid.HipHeight,
     Gravity = workspace.Gravity,
     FlySpeed = 50,
