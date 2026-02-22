@@ -1,0 +1,16 @@
+local Players = game:GetService("Players")
+local InsertService = game:GetService("InsertService")
+
+local player = Players.LocalPlayer
+local assetId = 6539459822
+
+local success, model = pcall(function()
+	return InsertService:LoadAsset(assetId)
+end)
+
+if success and model then
+	local tool = model:FindFirstChildOfClass("Tool", true)
+	if tool then
+		tool.Parent = player:WaitForChild("Backpack")
+	end
+end
